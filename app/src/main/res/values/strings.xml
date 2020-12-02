@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">Dripr</string>
+    <string name="title_discover">Discover</string>
+    <string name="title_map">Carte</string>
+    <string name="title_events">Evenements</string>
+    <string name="title_messages">Messages</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string name="facebook_app_id">752521648951956</string>
+    <string name="fb_login_protocol_scheme">fb752521648951956</string>
+    <string name="see_onborading_txt">Voir l\'onboarding</string>
+    <string name="disconnect_txt">Deconnexion</string>
+    <string name="signUpActivity_backgroundIllustration_contentDescription">Background illustration</string>
+    <string name="signUpActivity_logoBlack_contentDescription">Logo black</string>
+    <string name="signUpActivity_welcome_text">Bienvenue !</string>
+    <string name="signUpActivity_register_text">Inscription</string>
+    <string name="signUpActivity_name_hint">Nom</string>
+    <string name="signUpActivity_email_hint">E-mail</string>
+    <string name="signUpActivity_password_hint">Mot de passe</string>
+    <string name="signUpActivity_confirmPassword_hint">Confirmer mot de passe</string>
+    <string name="signUpActivity_validateBtn_text">Valider</string>
+    <string name="splashScreenActivity_logoWhite_contentDescription">Logo white</string>
+    <string name="welcomeActivity_backgroundIllustration_contentDescription">Background illustration</string>
+    <string name="welcomeActivity_registerBtn_contentDescription">Register button</string>
+    <string name="welcomeActivity_or_text">Ou</string>
+    <string name="welcomeActivity_googleAuthBtn_contentDescription">Google Auth Button</string>
+    <string name="welcomeActivity_facebookAuthBtn_contentDescription">Facebook Auth Button</string>
+    <string name="discoverFragment_toTry_text">À tester</string>
+    <string name="discoverFragment_popular_text">Populaire à Paris</string>
+    <string name="discoverFragment_articles_text">Articles</string>
+    <string name="horizontalPlaceItem_placeCover_contentDescription">Couverture de l\'évenement</string>
+    <string name="mapPlaceItem_placeCover_contentDescription">Couverture du restaurant</string>
+    <string name="mapPlaceItem_placeIcon_contentDescription">Icone addresse</string>
+    <string name="verticalPlaceItem_placeCover_contentDescription">Couverture du restaurant</string>
+    <string name="verticalPlaceItem_placeIcon_contentDescription">Place Icon</string>
+    <string name="placeActivity_placeCover_contentDescription">Place Cover</string>
+    <string name="searchToolbar_goBackIcon_contentDescription">Go back icon</string>
+    <string name="searchToolbar_cancel_text">Annuler</string>
+    <string name="searchToolbar_searchIcon_contentDescription">Search icon</string>
+    <string name="fragmentOnBoardingOne_event_text">Évenement</string>
+    <string name="fragmentOnBoardingOne_event_longText">Lorem ipsum dolor sit amet, consecttur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="fragmentOnboardingOne_illustration_contentDescription">Onboarding Illustration One</string>
+    <string name="fragmentOnboardingTwo_illustration_contentDescription">OnBoarding Illustration Two</string>
+    <string name="fragmentOnboardingThree_illustration_contentDescription">dsfkljhlkdsfjh</string>
+    <string name="onBoardingActivity_pass_text">Passer</string>
+    <string name="onBoardingActivity_start_text">Commencer</string>
+    <string name="activityMain_profilePicture_contentDescription">Profile picture</string>
+
+</resources>

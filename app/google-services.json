@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "91504863368",
+    "firebase_url": "https://dripr-bdaa1.firebaseio.com",
+    "project_id": "dripr-bdaa1",
+    "storage_bucket": "dripr-bdaa1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91504863368:android:fbbcfc720db83756ce173d",
+        "android_client_info": {
+          "package_name": "com.dripr.dripr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91504863368-a1vo0rq3nimbou8vdrodo7951u5dru6h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dripr.dripr",
+            "certificate_hash": "d6b0771430fa89e46cd18bcb4990f8d795d2a129"
+          }
+        },
+        {
+          "client_id": "91504863368-euk21bsu51nrojuli2lgpr5dku47k27j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8nef1OxMQ76LS91txYeLhwnpQjqFhFDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91504863368-euk21bsu51nrojuli2lgpr5dku47k27j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

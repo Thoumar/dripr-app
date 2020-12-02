@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="5dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@color/colorSecondary"
+            android:elevation="20dp"
+            app:alignItems="center"
+            app:justifyContent="space_between">
+
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="Dripr logo"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo_white"
+                android:tint="#FFFFFF"
+                tools:layout_editor_absoluteX="78dp"
+                tools:layout_editor_absoluteY="10dp" />
+
+            <ImageButton
+                android:id="@+id/mainSearchIcon"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="15dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="Search icon"
+                android:src="@drawable/ic_search"
+                android:tint="#FFFFFF" />
+
+        </com.google.android.flexbox.FlexboxLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
