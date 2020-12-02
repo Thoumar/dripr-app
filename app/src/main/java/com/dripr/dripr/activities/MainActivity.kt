@@ -6,19 +6,19 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.dripr.dripr.R
 import com.dripr.dripr.adapters.ViewPagerMainAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.main_toolbar.*
+
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     private var mainViewPagerMainAdapter: ViewPagerMainAdapter? = null
-    private val profilePictureUrl: String =
-        "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"
+    private val TAG = "[MainActivity]"
 
     public override fun onStart() {
         super.onStart()
@@ -41,28 +41,47 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     private fun initToolbar() {
-        Glide
-            .with(this)
-            .load(profilePictureUrl)
-            .circleCrop()
-            .into(mainProfilePicture)
 
-        mainProfilePicture.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    ProfileActivity::class.java
-                )
-            )
-        }
-        mainSearchIcon.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    SearchActivity::class.java
-                )
-            )
-        }
+//        val menu: Menu = bottomNavigation.menu
+//        val menuItem: MenuItem = menu.findItem(R.id.navigation_profile)
+//
+//        menuItem.iconTintList = null
+//        menuItem.iconTintMode = null
+//
+//        Log.d(TAG, Firebase.auth.currentUser?.photoUrl.toString())
+//
+//        Glide
+//            .with(applicationContext)
+//            .asBitmap()
+//            .load(Firebase.auth.currentUser?.photoUrl)
+//            .into(object: CustomTarget<Bitmap>() {
+//                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+//                    menuItem.icon = BitmapDrawable(resources, resource)
+//                }
+//                override fun onLoadCleared(placeholder: Drawable?) {}
+//            })
+
+        Glide.with(this)
+            .load(Firebase.auth.currentUser?.photoUrl.toString())
+            .apply(RequestOptions.circleCropTransform().placeholder(R.drawable.ic_profile))
+            .into(profilePicture)
+
+//        mainProfilePicture.setOnClickListener {
+//            startActivity(
+//                Intent(
+//                    this,
+//                    ProfileActivity::class.java
+//                )
+//            )
+//        }
+//        mainSearchIcon.setOnClickListener {
+//            startActivity(
+//                Intent(
+//                    this,
+//                    SearchActivity::class.java
+//                )
+//            )
+//        }
     }
 
     private fun initViewPager() {

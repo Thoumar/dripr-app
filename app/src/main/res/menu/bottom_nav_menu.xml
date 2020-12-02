@@ -16,9 +16,9 @@
         android:icon="@drawable/ic_events"
         android:title="@string/title_events" />
 
-    <!--    <item-->
-    <!--        android:id="@+id/navigation_messages"-->
-    <!--        android:icon="@drawable/ic_messages"-->
-    <!--        android:title="@string/title_messages" />-->
+    <!--        <item-->
+    <!--            android:id="@+id/navigation_messages"-->
+    <!--            android:icon="@drawable/ic_messages"-->
+    <!--            android:title="@string/title_messages" />-->
 
 </menu>

@@ -4,6 +4,7 @@
     <string name="title_map">Carte</string>
     <string name="title_events">Evenements</string>
     <string name="title_messages">Messages</string>
+    <string name="title_profile">Profile</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
