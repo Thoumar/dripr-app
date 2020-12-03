@@ -48,5 +48,8 @@
     <string name="onBoardingActivity_pass_text">Passer</string>
     <string name="onBoardingActivity_start_text">Commencer</string>
     <string name="activityMain_profilePicture_contentDescription">Profile picture</string>
+    <string name="discoverFragment_title_text">Discover</string>
+    <string name="messagesFragment_title_text">Messages</string>
+    <string name="eventsFragment_title_text">Évenements</string>
 
 </resources>
