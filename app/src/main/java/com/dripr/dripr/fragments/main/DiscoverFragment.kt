@@ -10,8 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dripr.dripr.R
+import com.dripr.dripr.activities.ArticleActivity
 import com.dripr.dripr.activities.EventActivity
+import com.dripr.dripr.adapters.articles.ArticlesAdapter
 import com.dripr.dripr.adapters.places.PlacesAdapter
+import com.dripr.dripr.entities.Article
 import com.dripr.dripr.entities.Event
 import com.dripr.dripr.entities.Place
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,9 +37,22 @@ class DiscoverFragment : Fragment() {
         return v
     }
 
-    private fun initRecyclerView(rc: RecyclerView, type: String, data: List<Place>) = rc.apply {
-        layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-        adapter = PlacesAdapter(type, data) { place -> onPlaceClick(place) }
+    private fun initPlacesRecyclerView(rc: RecyclerView, type: String, data: List<Place>) =
+        rc.apply {
+            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = PlacesAdapter(type, data) { place -> onPlaceClick(place) }
+        }
+
+    private fun initArticlesRecyclerView(rc: RecyclerView, type: String, data: List<Article>) =
+        rc.apply {
+            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = ArticlesAdapter(type, data) { article -> onArticleClick(article) }
+        }
+
+    private fun onArticleClick(article: Article) {
+        val i = Intent(requireContext(), ArticleActivity::class.java)
+        i.putExtra("Article", article)
+        startActivity(i)
     }
 
     private fun onPlaceClick(place: Place) {
@@ -63,9 +79,26 @@ class DiscoverFragment : Fragment() {
                     }
                 }
 
-                initRecyclerView(tryRecyclerView, "horizontal", toTryPlaces)
-                initRecyclerView(famousRecyclerView, "vertical", popularPlaces)
-                initRecyclerView(articlesRecyclerView, "horizontal", toTryPlaces)
+                initPlacesRecyclerView(tryRecyclerView, "horizontal", toTryPlaces)
+                initPlacesRecyclerView(famousRecyclerView, "vertical", popularPlaces)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+
+        FirebaseFirestore.getInstance().collection("articles")
+            .get()
+            .addOnSuccessListener { documents ->
+
+                val listArticles = ArrayList<Article>()
+
+                for (document in documents) {
+                    val article =
+                        document.toObject(Article::class.java).also { it.id = document.id }
+                    listArticles.add(article)
+                }
+
+                initArticlesRecyclerView(articlesRecyclerView, "horizontal", listArticles)
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents: ", exception)
