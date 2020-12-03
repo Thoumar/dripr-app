@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:textColor="@color/white"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="29dp" />
         </com.google.android.flexbox.FlexboxLayout>

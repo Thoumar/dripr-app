@@ -39,44 +39,42 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:padding="5dp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintBottom_toTopOf="@+id/flexboxLayout7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="0dp"
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/flexboxLayout7"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:alignItems="center"
+            app:justifyContent="flex_start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="UseCompoundDrawables">
+            app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
-                android:layout_width="@dimen/spacing_large"
-                android:layout_height="@dimen/spacing_large"
-                android:layout_marginEnd="@dimen/spacing_medium"
-                android:contentDescription="@string/mapPlaceItem_placeIcon_contentDescription"
-                app:srcCompat="@drawable/ic_location"
-                app:tint="@android:color/white" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_location" />
 
             <TextView
                 android:id="@+id/placeAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@android:color/white" />
-
-        </LinearLayout>
-
+                android:padding="5dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="29dp" />
+        </com.google.android.flexbox.FlexboxLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
