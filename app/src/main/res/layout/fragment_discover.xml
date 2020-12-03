@@ -17,6 +17,8 @@
             android:id="@+id/flexboxLayout6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -24,7 +26,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/discoverFragment_title_text"
                 android:textColor="@android:color/black"
@@ -32,13 +33,32 @@
 
         </com.google.android.flexbox.FlexboxLayout>
 
+        <TextView
+            android:id="@+id/toTryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins"
+            android:text="@string/discoverFragment_toTry_text"
+            android:textColor="@color/colorSecondary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flexboxLayout6" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tryRecyclerView"
             android:layout_width="0dp"
             android:layout_height="250dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flexboxLayout6">
+            app:layout_constraintTop_toBottomOf="@+id/toTryTextView"
+            tools:itemCount="5"
+            tools:listitem="@layout/place_horizontal_item">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -46,12 +66,13 @@
             android:id="@+id/famousTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins"
             android:text="@string/discoverFragment_popular_text"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorSecondary"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,10 +81,13 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/famousRecyclerView"
             android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:orientation="vertical"
+            tools:itemCount="1"
+            tools:listitem="@layout/place_vertical_item"
             app:layout_constraintTop_toBottomOf="@+id/famousTextView">
 
         </androidx.recyclerview.widget.RecyclerView>
@@ -73,12 +97,13 @@
             android:id="@+id/articlesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins"
             android:text="@string/discoverFragment_articles_text"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorSecondary"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,11 +113,12 @@
             android:id="@+id/articlesRecyclerView"
             android:layout_width="0dp"
             android:layout_height="200dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            tools:itemCount="1"
+            tools:listitem="@layout/article_horizontal_item"
             app:layout_constraintTop_toBottomOf="@+id/articlesTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

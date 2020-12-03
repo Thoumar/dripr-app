@@ -38,10 +38,10 @@ class DiscoverFragment : Fragment() {
     }
 
     private fun initPlacesRecyclerView(rc: RecyclerView, type: String, data: List<Place>) =
-        rc.apply {
-            layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = PlacesAdapter(type, data) { place -> onPlaceClick(place) }
-        }
+            rc.apply {
+                layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = PlacesAdapter(type, data) { place -> onPlaceClick(place) }
+            }
 
     private fun initArticlesRecyclerView(rc: RecyclerView, type: String, data: List<Article>) =
         rc.apply {
@@ -78,9 +78,14 @@ class DiscoverFragment : Fragment() {
                         popularPlaces.add(place)
                     }
                 }
-
-                initPlacesRecyclerView(tryRecyclerView, "horizontal", toTryPlaces)
-                initPlacesRecyclerView(famousRecyclerView, "vertical", popularPlaces)
+                tryRecyclerView.apply {
+                    layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+                    adapter = PlacesAdapter("horizontal", toTryPlaces) { place -> onPlaceClick(place) }
+                }
+                famousRecyclerView.apply {
+                    layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
+                    adapter = PlacesAdapter("vertical", popularPlaces) { place -> onPlaceClick(place) }
+                }
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents: ", exception)

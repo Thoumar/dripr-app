@@ -51,5 +51,6 @@
     <string name="discoverFragment_title_text">Discover</string>
     <string name="messagesFragment_title_text">Messages</string>
     <string name="eventsFragment_title_text">Évenements</string>
+    <string name="articleHorizontalItem_coverPicture_contentDescription">Couverture de l\'article</string>
 
 </resources>
