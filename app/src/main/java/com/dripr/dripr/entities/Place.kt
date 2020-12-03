@@ -10,102 +10,50 @@ import java.util.*
 data class Place(
 
     var id: String,
-    var infos: Info,
-    var location: Location,
-    var pictures: Pictures
+    var name: String,
+    var cover: String,
+    var short: String,
+    var description: String,
+    var address: String,
+    var latitude: Double,
+    var longitude: Double,
+    var isVerified: Boolean,
+    var website: String,
+    var tags: ArrayList<String>,
+    var range: Double?
 
 ) : ClusterItem, Parcelable {
 
     constructor() : this(
         "place_id",
-        Info(
-            "__url__picture",
-            "TOMYUM KUNGFU",
-            "Un restaurant chinois à Paris 8ème",
-            "__website_uri__",
-            "Lorem ipsum dolor sit amet, consecttur adipi cing elit, sed do eiusmod tempor didunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consecttur adipi ",
-            17.0,
-            Type.Bar,
-            hashMapOf(
-                "monday" to "11:30 - 23:00",
-                "tuesday" to "11:30 - 23:00",
-                "wednesday" to "11:30 - 23:00",
-                "tuesday" to "11:30 - 23:00",
-                "friday" to "11:30 - 23:00",
-                "saturday" to "11:30 - 23:00",
-                "sunday" to "11:30 - 23:00",
-                "global" to "11:30 - 23:00",
-                "openOnWeekends" to "yes",
-                "openOnDayOff" to "yes"
-            )
-        ),
-        Location(
-            42.03156513221,
-            2.03156513221,
-            2.5,
-            "Ile de France",
-            "40 rue des primevères"
-        ),
-        Pictures(
-            arrayListOf(
-                "__url_image_one__",
-                "__url_image_two__",
-                "__url_image_three__",
-                "__url_image_four__",
-                "__url_image_five__",
-                "__url_image_six__",
-                "__url_image_seven__",
-            )
-        )
-    )
-
-    enum class Type {
-        Bar
+        "TOMYUM KUNGFU",
+        "TOMYUM KUNGFU",
+        "Un restaurant chinois à Paris 8ème",
+        "Description longe du lieu",
+        "40 rue des primeveres MDR",
+        42.03156513221,
+        2.03156513221,
+        true,
+        "https://www.restaurant-lile.com/",
+        ArrayList(emptyList<String>()),
+        0.0
+    ) {
+        val tags = ArrayList<String>()
+        tags.add("popular")
+        this.tags = tags
     }
-
-    @Parcelize
-    class Info(
-        var cover: String,
-        var name: String,
-        var snippet: String,
-        var websiteUri: String,
-        var description: String,
-        var averagePrice: Double,
-        var type: Type,
-        var hours: HashMap<String, String>
-    ) : Parcelable
-
-    @Parcelize
-    class Location(
-        var latitude: Double,
-        var longitude: Double,
-        var range: Double?,
-        var region: String,
-        var streetName: String,
-    ) : Parcelable
-
-    @Parcelize
-    enum class Hour(
-        var startTime: String,
-        var endTime: String
-    ) : Parcelable
-
-    @Parcelize
-    class Pictures(
-        var pictures: ArrayList<String>
-    ) : Parcelable
-
 
     override fun getPosition(): LatLng {
-        return LatLng(location.latitude, location.longitude)
+        return LatLng(latitude, longitude)
     }
 
-    override fun getTitle(): String {
-        return this.infos.name
+    override fun getTitle(): String? {
+        return this.name
     }
 
-    override fun getSnippet(): String {
-        return this.infos.snippet
+    override fun getSnippet(): String? {
+        return this.short
     }
+
 }
 

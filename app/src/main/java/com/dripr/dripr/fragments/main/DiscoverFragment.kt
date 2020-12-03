@@ -49,15 +49,23 @@ class DiscoverFragment : Fragment() {
         FirebaseFirestore.getInstance().collection("places")
             .get()
             .addOnSuccessListener { documents ->
-                val result = ArrayList<Place>()
+
+                val toTryPlaces = ArrayList<Place>()
+                val popularPlaces = ArrayList<Place>()
+
                 for (document in documents) {
                     val place = document.toObject(Place::class.java).also { it.id = document.id }
-                    result.add(place)
+                    if (place.tags.contains("to_try")) {
+                        toTryPlaces.add(place)
+                    }
+                    if (place.tags.contains("popular")) {
+                        popularPlaces.add(place)
+                    }
                 }
 
-                initRecyclerView(tryRecyclerView, "horizontal", result)
-                initRecyclerView(famousRecyclerView, "vertical", result)
-                initRecyclerView(articlesRecyclerView, "horizontal", result)
+                initRecyclerView(tryRecyclerView, "horizontal", toTryPlaces)
+                initRecyclerView(famousRecyclerView, "vertical", popularPlaces)
+                initRecyclerView(articlesRecyclerView, "horizontal", toTryPlaces)
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents: ", exception)

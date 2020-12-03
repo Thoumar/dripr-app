@@ -12,11 +12,12 @@ class PlaceHorizontalViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
     RecyclerView.ViewHolder(inflater.inflate(R.layout.place_horizontal_item, parent, false)) {
 
     fun bind(place: Place, click: ((place: Place) -> Unit)) {
-        itemView.placeName.text = place.infos.name
+        itemView.placeName.text = place.name
+        itemView.placeAddress.text = place.address
 
         Glide
             .with(itemView)
-            .load(place.infos.cover)
+            .load(place.cover)
             .into(itemView.placeCover)
 
         itemView.placeCard.setOnClickListener {

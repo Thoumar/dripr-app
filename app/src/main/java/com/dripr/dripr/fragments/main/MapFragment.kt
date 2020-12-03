@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.maps.android.clustering.ClusterManager
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -39,6 +40,7 @@ import com.karumi.dexter.listener.single.PermissionListener
 import com.thoumar.kebabnomade.others.OnSnapPositionChangeListener
 import com.thoumar.kebabnomade.others.PlaceClusterRenderer
 import com.thoumar.kebabnomade.others.SnapOnScrollListener
+import kotlinx.android.synthetic.main.fragment_discover.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.fragment_map.view.*
 import java.io.IOException
@@ -54,7 +56,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
     }
 
     private var animationDone = false
-    private var places = ArrayList<Place>()
+    private lateinit var places: List<Place>
     private lateinit var map: MapView
     private lateinit var googleMap: GoogleMap
     private lateinit var lastLocation: Location
@@ -79,6 +81,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
         initLocationProcess()
         return v
     }
+
+    private fun populatePlacesArray() {
+
+    }
+
 
     override fun onMapReady(mMap: GoogleMap) {
         googleMap = mMap
@@ -112,7 +119,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
     private fun onMapPlaceClicked(place: Place): Boolean {
         val indexOfSelectedPlace = places.lastIndexOf(place)
         if (indexOfSelectedPlace != -1) mapRecyclerView.smoothSnapToPosition(indexOfSelectedPlace)
-        animateCamera(LatLng(place.location.latitude, place.location.longitude))
+        animateCamera(LatLng(place.latitude, place.longitude))
         return true
     }
 
@@ -125,32 +132,43 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
 
         // Is connected
         if (isOnline()) {
+            FirebaseFirestore.getInstance().collection("places")
+                .get()
+                .addOnSuccessListener { documents ->
+                    val tempPlacesList = ArrayList<Place>()
+                    for (document in documents) {
+                        val place =
+                            document.toObject(Place::class.java).also { it.id = document.id }
+                        tempPlacesList.add(place)
+                    }
+                    if (this::lastLocation.isInitialized) {
+                        tempPlacesList.map { place ->
+                            place.range = getDistanceFromLatLonInKm(
+                                LatLng(
+                                    lastLocation.latitude,
+                                    lastLocation.longitude
+                                ), place.position
+                            )
+                        }
+                        places = tempPlacesList.sortedBy { place -> place.range }
+                    } else {
+                        places = tempPlacesList
+                    }
 
-            if (this::lastLocation.isInitialized) {
-                places.map { restaurant ->
-                    restaurant.location.range = getDistanceFromLatLonInKm(
-                        LatLng(
-                            lastLocation.latitude,
-                            lastLocation.longitude
-                        ), restaurant.position
+                    mapRecyclerView.layoutManager = LinearLayoutManager(
+                        this@MapFragment.context,
+                        LinearLayoutManager.HORIZONTAL,
+                        false
                     )
+                    mapRecyclerView.adapter = PlacesAdapter("map", places) { place ->
+                        onPlaceClick(place)
+                    }
+                    places.forEach { place -> clusterManager?.addItem(place) }
+                    clusterManager!!.cluster()
+                    setSnapHelperBehaviorForRecyclerView()
                 }
-                places = places.sortedBy { place -> place.location.range } as ArrayList<Place>
-            }
-
-
-
-            mapRecyclerView.layoutManager = LinearLayoutManager(
-                this@MapFragment.context,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            mapRecyclerView.adapter = PlacesAdapter("map", places) { place ->
-                onPlaceClick(place)
-            }
-            places.forEach { place -> clusterManager?.addItem(place) }
-            clusterManager!!.cluster()
-            setSnapHelperBehaviorForRecyclerView()
+                .addOnFailureListener { exception ->
+                }
         } else {
             val builder: CFAlertDialog.Builder = CFAlertDialog.Builder(activity)
                 .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
@@ -247,8 +265,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
                 googleMap.animateCamera(
                     CameraUpdateFactory.newLatLngZoom(
                         LatLng(
-                            place.location.latitude,
-                            place.location.longitude
+                            place.latitude,
+                            place.longitude
                         ), 15f
                     )
                 )
@@ -338,273 +356,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
         val i = Intent(requireContext(), PlaceActivity::class.java)
         i.putExtra("Place", place)
         startActivity(i)
-    }
-
-    private fun populatePlacesArray() {
-        places.add(
-            Place(
-                "place_id",
-                Place.Info(
-                    "__url__picture",
-                    "TOMYUM KUNGFU",
-                    "Un restaurant chinois à Paris 8ème",
-                    "__website_uri__",
-                    "Lorem ipsum dolor sit amet, consecttur adipi cing elit, sed do eiusmod tempor didunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consecttur adipi ",
-                    17.0,
-                    Place.Type.Bar,
-                    hashMapOf(
-                        "monday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "wednesday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "friday" to "11:30 - 23:00",
-                        "saturday" to "11:30 - 23:00",
-                        "sunday" to "11:30 - 23:00",
-                        "global" to "11:30 - 23:00",
-                        "openOnWeekends" to "yes",
-                        "openOnDayOff" to "yes"
-                    )
-                ),
-                Place.Location(
-                    42.03156513221,
-                    2.03156513221,
-                    2.5,
-                    "Ile de France",
-                    "40 rue des primevères"
-                ),
-                Place.Pictures(
-                    arrayListOf(
-                        "__url_image_one__",
-                        "__url_image_two__",
-                        "__url_image_three__",
-                        "__url_image_four__",
-                        "__url_image_five__",
-                        "__url_image_six__",
-                        "__url_image_seven__",
-                    )
-                )
-            )
-        )
-        places.add(
-            Place(
-                "place_id",
-                Place.Info(
-                    "__url__picture",
-                    "TOMYUM KUNGFU",
-                    "Un restaurant chinois à Paris 8ème",
-                    "__website_uri__",
-                    "Lorem ipsum dolor sit amet, consecttur adipi cing elit, sed do eiusmod tempor didunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consecttur adipi ",
-                    17.0,
-                    Place.Type.Bar,
-                    hashMapOf(
-                        "monday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "wednesday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "friday" to "11:30 - 23:00",
-                        "saturday" to "11:30 - 23:00",
-                        "sunday" to "11:30 - 23:00",
-                        "global" to "11:30 - 23:00",
-                        "openOnWeekends" to "yes",
-                        "openOnDayOff" to "yes"
-                    )
-                ),
-                Place.Location(
-                    42.03156513221,
-                    2.03156513221,
-                    2.5,
-                    "Ile de France",
-                    "40 rue des primevères"
-                ),
-                Place.Pictures(
-                    arrayListOf(
-                        "__url_image_one__",
-                        "__url_image_two__",
-                        "__url_image_three__",
-                        "__url_image_four__",
-                        "__url_image_five__",
-                        "__url_image_six__",
-                        "__url_image_seven__",
-                    )
-                )
-            )
-        )
-        places.add(
-            Place(
-                "place_id",
-                Place.Info(
-                    "__url__picture",
-                    "TOMYUM KUNGFU",
-                    "Un restaurant chinois à Paris 8ème",
-                    "__website_uri__",
-                    "Lorem ipsum dolor sit amet, consecttur adipi cing elit, sed do eiusmod tempor didunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consecttur adipi ",
-                    17.0,
-                    Place.Type.Bar,
-                    hashMapOf(
-                        "monday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "wednesday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "friday" to "11:30 - 23:00",
-                        "saturday" to "11:30 - 23:00",
-                        "sunday" to "11:30 - 23:00",
-                        "global" to "11:30 - 23:00",
-                        "openOnWeekends" to "yes",
-                        "openOnDayOff" to "yes"
-                    )
-                ),
-                Place.Location(
-                    42.03156513221,
-                    2.03156513221,
-                    2.5,
-                    "Ile de France",
-                    "40 rue des primevères"
-                ),
-                Place.Pictures(
-                    arrayListOf(
-                        "__url_image_one__",
-                        "__url_image_two__",
-                        "__url_image_three__",
-                        "__url_image_four__",
-                        "__url_image_five__",
-                        "__url_image_six__",
-                        "__url_image_seven__",
-                    )
-                )
-            )
-        )
-        places.add(
-            Place(
-                "place_id",
-                Place.Info(
-                    "__url__picture",
-                    "TOMYUM KUNGFU",
-                    "Un restaurant chinois à Paris 8ème",
-                    "__website_uri__",
-                    "Lorem ipsum dolor sit amet, consecttur adipi cing elit, sed do eiusmod tempor didunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consecttur adipi ",
-                    17.0,
-                    Place.Type.Bar,
-                    hashMapOf(
-                        "monday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "wednesday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "friday" to "11:30 - 23:00",
-                        "saturday" to "11:30 - 23:00",
-                        "sunday" to "11:30 - 23:00",
-                        "global" to "11:30 - 23:00",
-                        "openOnWeekends" to "yes",
-                        "openOnDayOff" to "yes"
-                    )
-                ),
-                Place.Location(
-                    42.03156513221,
-                    2.03156513221,
-                    2.5,
-                    "Ile de France",
-                    "40 rue des primevères"
-                ),
-                Place.Pictures(
-                    arrayListOf(
-                        "__url_image_one__",
-                        "__url_image_two__",
-                        "__url_image_three__",
-                        "__url_image_four__",
-                        "__url_image_five__",
-                        "__url_image_six__",
-                        "__url_image_seven__",
-                    )
-                )
-            )
-        )
-        places.add(
-            Place(
-                "place_id",
-                Place.Info(
-                    "__url__picture",
-                    "TOMYUM KUNGFU",
-                    "Un restaurant chinois à Paris 8ème",
-                    "__website_uri__",
-                    "Lorem ipsum dolor sit amet, consecttur adipi cing elit, sed do eiusmod tempor didunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consecttur adipi ",
-                    17.0,
-                    Place.Type.Bar,
-                    hashMapOf(
-                        "monday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "wednesday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "friday" to "11:30 - 23:00",
-                        "saturday" to "11:30 - 23:00",
-                        "sunday" to "11:30 - 23:00",
-                        "global" to "11:30 - 23:00",
-                        "openOnWeekends" to "yes",
-                        "openOnDayOff" to "yes"
-                    )
-                ),
-                Place.Location(
-                    42.03156513221,
-                    2.03156513221,
-                    2.5,
-                    "Ile de France",
-                    "40 rue des primevères"
-                ),
-                Place.Pictures(
-                    arrayListOf(
-                        "__url_image_one__",
-                        "__url_image_two__",
-                        "__url_image_three__",
-                        "__url_image_four__",
-                        "__url_image_five__",
-                        "__url_image_six__",
-                        "__url_image_seven__",
-                    )
-                )
-            )
-        )
-        places.add(
-            Place(
-                "place_id",
-                Place.Info(
-                    "__url__picture",
-                    "TOMYUM KUNGFU",
-                    "Un restaurant chinois à Paris 8ème",
-                    "__website_uri__",
-                    "Lorem ipsum dolor sit amet, consecttur adipi cing elit, sed do eiusmod tempor didunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consecttur adipi ",
-                    17.0,
-                    Place.Type.Bar,
-                    hashMapOf(
-                        "monday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "wednesday" to "11:30 - 23:00",
-                        "tuesday" to "11:30 - 23:00",
-                        "friday" to "11:30 - 23:00",
-                        "saturday" to "11:30 - 23:00",
-                        "sunday" to "11:30 - 23:00",
-                        "global" to "11:30 - 23:00",
-                        "openOnWeekends" to "yes",
-                        "openOnDayOff" to "yes"
-                    )
-                ),
-                Place.Location(
-                    42.03156513221,
-                    2.03156513221,
-                    2.5,
-                    "Ile de France",
-                    "40 rue des primevères"
-                ),
-                Place.Pictures(
-                    arrayListOf(
-                        "__url_image_one__",
-                        "__url_image_two__",
-                        "__url_image_three__",
-                        "__url_image_four__",
-                        "__url_image_five__",
-                        "__url_image_six__",
-                        "__url_image_seven__",
-                    )
-                )
-            )
-        )
     }
 
     override fun onPermissionGranted(response: PermissionGrantedResponse?) = getCurrentLocation()
