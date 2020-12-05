@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dripr.dripr.R
 import com.dripr.dripr.activities.ArticleActivity
-import com.dripr.dripr.activities.EventActivity
+import com.dripr.dripr.activities.PlaceActivity
 import com.dripr.dripr.adapters.articles.ArticlesAdapter
 import com.dripr.dripr.adapters.places.PlacesAdapter
 import com.dripr.dripr.entities.Article
@@ -56,7 +56,7 @@ class DiscoverFragment : Fragment() {
     }
 
     private fun onPlaceClick(place: Place) {
-        val i = Intent(requireContext(), EventActivity::class.java)
+        val i = Intent(requireContext(), PlaceActivity::class.java)
         i.putExtra("Place", place)
         startActivity(i)
     }

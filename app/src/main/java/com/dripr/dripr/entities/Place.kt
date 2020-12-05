@@ -20,6 +20,7 @@ data class Place(
     var isVerified: Boolean,
     var website: String,
     var tags: ArrayList<String>,
+    var pictures: ArrayList<HashMap<String, String>>,
     var range: Double?
 
 ) : ClusterItem, Parcelable {
@@ -36,11 +37,24 @@ data class Place(
         true,
         "https://www.restaurant-lile.com/",
         ArrayList(emptyList<String>()),
+        ArrayList<HashMap<String, String>>(emptyList<HashMap<String, String>>()),
         0.0
     ) {
         val tags = ArrayList<String>()
         tags.add("popular")
         this.tags = tags
+
+        val pictures = ArrayList<HashMap<String, String>>()
+        pictures.add(
+            hashMapOf("src" to "https://raw.githubusercontent.com/sayyam/carouselview/master/sample/src/main/res/drawable/image_1.jpg")
+        )
+        pictures.add(
+            hashMapOf("src" to "https://raw.githubusercontent.com/sayyam/carouselview/master/sample/src/main/res/drawable/image_2.jpg")
+        )
+        pictures.add(
+            hashMapOf("src" to "https://raw.githubusercontent.com/sayyam/carouselview/master/sample/src/main/res/drawable/image_3.jpg")
+        )
+        this.pictures = pictures
     }
 
     override fun getPosition(): LatLng {

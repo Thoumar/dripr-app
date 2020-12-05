@@ -112,4 +112,7 @@ dependencies {
 
     // Dots
     implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.1.2'
+
+    // Carousel
+    implementation 'com.synnapps:carouselview:0.1.4'
 }

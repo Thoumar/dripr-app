@@ -13,6 +13,10 @@ class EventsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_events, container, false)
+        val v: View = inflater.inflate(R.layout.fragment_events, container, false)
+
+
+
+        return v
     }
 }
