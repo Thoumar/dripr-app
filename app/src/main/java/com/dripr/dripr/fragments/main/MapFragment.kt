@@ -133,6 +133,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
         // Is connected
         if (isOnline()) {
             FirebaseFirestore.getInstance().collection("places")
+                .whereArrayContains("scopes", "map")
                 .get()
                 .addOnSuccessListener { documents ->
                     val tempPlacesList = ArrayList<Place>()

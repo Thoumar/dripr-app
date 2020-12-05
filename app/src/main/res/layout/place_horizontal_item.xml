@@ -73,6 +73,9 @@
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:scrollHorizontally="true"
                 tools:layout_editor_absoluteX="29dp" />
         </com.google.android.flexbox.FlexboxLayout>
 
