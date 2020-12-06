@@ -115,4 +115,7 @@ dependencies {
 
     // Carousel
     implementation 'com.synnapps:carouselview:0.1.4'
+
+    // Date and Time Picker
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
 }
