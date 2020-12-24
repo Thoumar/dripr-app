@@ -1,5 +1,6 @@
 package com.dripr.dripr.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +16,9 @@ import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -113,67 +116,65 @@ class WelcomeActivity : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        Firebase.auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user = Firebase.auth.currentUser
-                    val db = FirebaseFirestore.getInstance()
-                    db.collection("users")
-                        .whereEqualTo("email", user!!.email)
-                        .get()
-                        .addOnSuccessListener { documents ->
-                            if (documents.size() >= 1) {
-                                startActivity(Intent(this, MainActivity::class.java))
-                            } else {
-                                val newUserData = hashMapOf(
-                                    "email" to user.email,
-                                    "bio" to "New user of the Dripr App",
-                                    "favoritePlaces" to null
-                                )
-                                db.collection("users")
-                                    .add(newUserData)
-                                    .addOnSuccessListener {
-                                        Log.d(TAG, "DocumentSnapshot successfully written!")
-                                        startActivity(Intent(this, MainActivity::class.java))
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.w(TAG, "Error writing document", e)
-                                    }
-                            }
-                        }
-                        .addOnFailureListener { exception ->
-
-                        }
-
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                } else {
-                    Snackbar.make(
-                        welcome_activity_container,
-                        "Authentication Failed.",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
+        Firebase.auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
+            validateLogin(task)
+        }
     }
 
     private fun handleFacebookAccessToken(token: AccessToken) {
-        Log.d(TAG, "handleFacebookAccessToken:$token")
-
         val credential = FacebookAuthProvider.getCredential(token.token)
-        Firebase.auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                } else {
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Snackbar.make(
-                        welcome_activity_container,
-                        "Authentication Failed.",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+        Firebase.auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
+            validateLogin(task)
+        }
+    }
+
+    private fun validateLogin(task: Task<AuthResult>) {
+        if (task.isSuccessful) {
+            val user = Firebase.auth.currentUser
+            val db = FirebaseFirestore.getInstance()
+            db.collection("users")
+                .whereEqualTo("email", user!!.email)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (documents.size() >= 1) {
+                        startActivity(Intent(this, MainActivity::class.java))
+                    } else {
+                        val defaultUserId = Firebase.auth.currentUser!!.uid
+                        val newUserData = hashMapOf(
+                            "profilePictureUri" to user.photoUrl.toString(),
+                            "email" to user.email,
+                            "pseudo" to user.email + (Random().nextInt(900000) + 100000).toString(),
+                            "bio" to "New user of the Dripr App",
+                            "favoritePlaces" to null
+                        )
+
+                        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+                        with(sharedPref.edit()) {
+                            putString("USER_UID", user.uid)
+                            apply()
+                        }
+
+
+                        db.collection("users").document(defaultUserId)
+                            .set(newUserData)
+                            .addOnSuccessListener { document ->
+                                startActivity(Intent(this, MainActivity::class.java))
+                                finish()
+                            }
+                            .addOnFailureListener { e ->
+                                // Handle error
+                            }
+                    }
                 }
-            }
+                .addOnFailureListener { exception ->
+
+                }
+        } else {
+            Snackbar.make(
+                welcome_activity_container,
+                "Authentication Failed.",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
     }
 }

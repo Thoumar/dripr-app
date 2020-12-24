@@ -11,12 +11,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginTop="40dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/flexboxLayout6"
+            android:id="@+id/headerContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:alignItems="center"
+            app:justifyContent="space_between"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,6 +33,19 @@
                 android:textColor="@android:color/black"
                 android:textSize="35sp" />
 
+            <ImageButton
+                android:id="@+id/searchButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_search"
+                android:tint="@color/black"
+                tools:layout_editor_absoluteX="330dp"
+                tools:layout_editor_absoluteY="8dp">
+
+            </ImageButton>
+
         </com.google.android.flexbox.FlexboxLayout>
 
         <TextView
@@ -40,14 +55,14 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins"
-            android:text="@string/discoverFragment_toTry_text"
             android:textColor="@color/colorSecondary"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:text="@string/discoverFragment_toTry_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flexboxLayout6" />
+            app:layout_constraintTop_toBottomOf="@+id/headerContainer" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tryRecyclerView"

@@ -1,5 +1,4 @@
-package com.thoumar.kebabnomade.adapters.restaurants.viewholders
-
+package com.dripr.dripr.adapters.places.viewholders
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

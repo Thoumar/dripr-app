@@ -47,16 +47,16 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         }
 
         createEvent.setOnClickListener {
-            val event_name = eventName.text.toString()
+            val event_name = userName.text.toString()
             val DEFAULT_PATTERN = "yyyy-MM-dd HH:mm:ss"
 
             val formatter: DateFormat = SimpleDateFormat(DEFAULT_PATTERN)
             val event_date = formatter.parse("${eventDate} ${eventTime}")
 
             val newEventData = hashMapOf(
-                    "name" to event_name,
-                    "date" to event_date,
-                    "ownerId" to Firebase.auth.uid
+                "name" to event_name,
+                "date" to event_date,
+                "ownerId" to Firebase.auth.currentUser?.uid
             )
 
             FirebaseFirestore.getInstance().collection("events")

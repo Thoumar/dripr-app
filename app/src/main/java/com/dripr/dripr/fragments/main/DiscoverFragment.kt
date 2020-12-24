@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dripr.dripr.R
 import com.dripr.dripr.activities.ArticleActivity
 import com.dripr.dripr.activities.PlaceActivity
+import com.dripr.dripr.activities.SearchActivity
 import com.dripr.dripr.adapters.articles.ArticlesAdapter
 import com.dripr.dripr.adapters.places.PlacesAdapter
 import com.dripr.dripr.entities.Article
@@ -19,6 +20,7 @@ import com.dripr.dripr.entities.Event
 import com.dripr.dripr.entities.Place
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_discover.*
+import kotlinx.android.synthetic.main.fragment_discover.view.*
 
 class DiscoverFragment : Fragment() {
 
@@ -34,6 +36,10 @@ class DiscoverFragment : Fragment() {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_discover, container, false)
         populateEventsArray()
+
+        v.searchButton.setOnClickListener {
+            startActivity(Intent(this.activity, SearchActivity::class.java))
+        }
         return v
     }
 

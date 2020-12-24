@@ -3,10 +3,10 @@ package com.dripr.dripr.adapters.places
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.dripr.dripr.adapters.places.viewholders.PlaceHorizontalViewHolder
+import com.dripr.dripr.adapters.places.viewholders.PlaceMapViewHolder
+import com.dripr.dripr.adapters.places.viewholders.PlaceVerticalViewHolder
 import com.dripr.dripr.entities.Place
-import com.thoumar.kebabnomade.adapters.places.viewholders.PlaceVerticalViewHolder
-import com.thoumar.kebabnomade.adapters.restaurants.viewholders.PlaceHorizontalViewHolder
-import com.thoumar.kebabnomade.adapters.restaurants.viewholders.PlaceMapViewHolder
 
 class PlacesAdapter(
     private val type: String,

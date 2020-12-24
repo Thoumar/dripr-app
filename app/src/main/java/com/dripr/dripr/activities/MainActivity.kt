@@ -10,8 +10,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dripr.dripr.R
 import com.dripr.dripr.adapters.ViewPagerMainAdapter
+import com.dripr.dripr.entities.User
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -41,6 +43,19 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         initToolbar()
         initViewPager()
+
+        val userId = Firebase.auth.currentUser!!.uid
+
+        profilePicture.setOnClickListener {
+            FirebaseFirestore.getInstance().collection("users").document(userId).get()
+                .addOnSuccessListener { document ->
+                    val user = document.toObject(User::class.java).also { it?.id = document.id }
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    intent.putExtra("USER", user)
+                    intent.putExtra("DISPLAY_TYPE", "EDIT")
+                    startActivity(intent)
+                }
+        }
     }
 
     private fun initToolbar() {
@@ -67,7 +82,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                     0 -> bottomNavigation.menu.findItem(R.id.navigation_discover).isChecked = true
                     1 -> bottomNavigation.menu.findItem(R.id.navigation_map).isChecked = true
                     2 -> bottomNavigation.menu.findItem(R.id.navigation_events).isChecked = true
-//                    3 -> bottomNavigation.menu.findItem(R.id.navigation_messages).isChecked = true
                 }
             }
 
@@ -80,7 +94,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             R.id.navigation_discover -> mainViewPager.currentItem = 0
             R.id.navigation_map -> mainViewPager.currentItem = 1
             R.id.navigation_events -> mainViewPager.currentItem = 2
-//            R.id.navigation_messages -> mainViewPager.currentItem = 3
         }
         return true
     }

@@ -6,16 +6,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @Parcelize
-data class Event(
+data class Request(
     var id: String,
-    var name: String,
-    var date: Date,
-    var ownerId: String,
+    var userPath: String,
+    var date: Date
 ) : Parcelable {
     constructor() : this(
         "",
-        "Test",
+        "users/userid",
         SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-12-25 20:00:00"),
-        "kldsjhlkjsdhfg"
     )
 }

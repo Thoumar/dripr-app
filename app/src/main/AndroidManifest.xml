@@ -39,7 +39,19 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".activities.EventActivity" />
+        <activity android:name=".activities.EventActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.dripr.fr"
+                    android:pathPattern="/event/"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.ErrorActivity" />
         <activity android:name=".activities.SuccessActivity" />

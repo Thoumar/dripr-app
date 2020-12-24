@@ -1,23 +1,47 @@
 package com.dripr.dripr.activities
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.dripr.dripr.R
 import com.dripr.dripr.entities.Event
-import kotlinx.android.synthetic.main.activity_event.*
 
 class EventActivity : AppCompatActivity() {
+
+    private var event: Event? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_event)
 
-        val event = intent.getParcelableExtra<Event>("EVENT")
+        event = intent.getParcelableExtra("Event")
 
-        Glide
-            .with(this)
-            .load(event?.infos?.cover)
-            .into(app_bar_cover)
+        handleIntent(intent)
+    }
 
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        val appLinkAction = intent.action
+        val appLinkData: Uri? = intent.data
+        if (Intent.ACTION_VIEW == appLinkAction) {
+            appLinkData?.lastPathSegment?.also { eventId ->
+                getEventById(eventId)
+            }
+        }
+    }
+
+    private fun getEventById(eventId: String) {
+//        val db = Fire
+//        val docRef = db.collection("event").document(eventId)
+//        docRef.get().addOnCompleteListener { snapshot ->
+//            snapshot.to
+//            populate
+//        }
     }
 }
