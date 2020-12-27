@@ -7,10 +7,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dripr.dripr.R
 import com.dripr.dripr.entities.Friend
-import kotlinx.android.synthetic.main.friend_vertical_item.view.*
+import kotlinx.android.synthetic.main.friend_horizontal_item.view.*
 
-class FriendVerticalViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-    RecyclerView.ViewHolder(inflater.inflate(R.layout.friend_vertical_item, parent, false)) {
+class FriendHorizontalViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
+    RecyclerView.ViewHolder(inflater.inflate(R.layout.friend_horizontal_item, parent, false)) {
 
     fun bind(friend: Friend, click: ((friend: Friend) -> Unit)) {
 

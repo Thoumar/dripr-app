@@ -3,6 +3,7 @@ package com.dripr.dripr.adapters.friends
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.dripr.dripr.adapters.friends.viewholders.FriendHorizontalViewHolder
 import com.dripr.dripr.adapters.friends.viewholders.FriendVerticalViewHolder
 import com.dripr.dripr.entities.Friend
 
@@ -17,6 +18,7 @@ class FriendsAdapter(
 
         return when (type) {
             "vertical" -> FriendVerticalViewHolder(inflater, parent)
+            "horizontal" -> FriendHorizontalViewHolder(inflater, parent)
             else -> FriendVerticalViewHolder(inflater, parent)
         }
     }
@@ -27,6 +29,10 @@ class FriendsAdapter(
         when (type) {
             "vertical" -> {
                 holder as FriendVerticalViewHolder
+                holder.bind(friend, click)
+            }
+            "horizontal" -> {
+                holder as FriendHorizontalViewHolder
                 holder.bind(friend, click)
             }
             else -> {

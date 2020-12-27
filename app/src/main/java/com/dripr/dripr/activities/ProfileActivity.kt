@@ -33,7 +33,6 @@ class ProfileActivity : AppCompatActivity() {
             .circleCropTransform()
             .placeholder(R.drawable.ic_profile)
 
-
         if (displayType == "VIEW") {
 
             addAsFriendBtn.visibility = View.VISIBLE
@@ -71,8 +70,7 @@ class ProfileActivity : AppCompatActivity() {
         } else if (displayType == "EDIT") {
 
             FirebaseFirestore.getInstance().collection("users")
-                .document(Firebase.auth.currentUser!!.uid).collection("requests")
-                .get()
+                .document(Firebase.auth.currentUser!!.uid).collection("requests").get()
                 .addOnSuccessListener { documents ->
                     val requests = ArrayList<Request>()
                     for (document in documents) {
@@ -94,8 +92,7 @@ class ProfileActivity : AppCompatActivity() {
                 }
 
             FirebaseFirestore.getInstance().collection("users")
-                .document(Firebase.auth.currentUser!!.uid).collection("friends")
-                .get()
+                .document(Firebase.auth.currentUser!!.uid).collection("friends").get()
                 .addOnSuccessListener { documents ->
                     val friends = ArrayList<Friend>()
                     for (document in documents) {
@@ -104,12 +101,14 @@ class ProfileActivity : AppCompatActivity() {
                         friends.add(friend)
                     }
 
-
+                    Toast.makeText(this, friends.toString(), Toast.LENGTH_LONG).show()
                     friendsRc.apply {
                         layoutManager =
                             LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
-                        adapter =
-                            FriendsAdapter("vertical", friends) { friend -> onFriendClick(friend) }
+                        adapter = FriendsAdapter(
+                            "horizontal",
+                            friends
+                        ) { friend -> onFriendClick(friend) }
                     }
                 }
 
@@ -161,26 +160,42 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun onAcceptClick(request: Request) {
         // For the actual user of the app
-        val newFriendData = hashMapOf(
-            "userPath" to request.userPath,
-            "date" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-12-25 20:00:00"),
-        )
+        FirebaseFirestore.getInstance().document(request.userPath).get()
+            .addOnSuccessListener { document ->
+                val initiatorUser =
+                    document.toObject(User::class.java).also { it?.id = document.id }
+                val newFriendData = hashMapOf(
+                    "userPath" to "users/" + initiatorUser?.id,
+                    "profilePicture" to initiatorUser?.profilePictureUri,
+                    "pseudo" to initiatorUser?.pseudo,
+                    "date" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-12-25 20:00:00"),
+                )
+
+                // Add friend to user's friendList
+                FirebaseFirestore.getInstance().document("users/" + Firebase.auth.currentUser!!.uid)
+                    .collection("friends").add(newFriendData)
+            }
 
         // For the initiator of the request
-        val friendData = hashMapOf(
-            "userPath" to "users/" + Firebase.auth.currentUser!!.uid,
-            "date" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-12-25 20:00:00"),
-        )
+        FirebaseFirestore.getInstance().document(request.userPath).get()
+            .addOnSuccessListener { document ->
+                val actualUser = document.toObject(User::class.java).also { it?.id = document.id }
+                val friendData = hashMapOf(
+                    "userPath" to "users/" + Firebase.auth.currentUser!!.uid,
+                    "profilePicture" to actualUser?.profilePictureUri,
+                    "pseudo" to actualUser?.pseudo,
+                    "date" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-12-25 20:00:00"),
+                )
 
-        // Add friend to user's friends
-        FirebaseFirestore.getInstance().document("users/" + Firebase.auth.currentUser!!.uid)
-            .collection("friends").add(newFriendData)
-        // Add friend to initiator's friends
-        FirebaseFirestore.getInstance().document(request.userPath).collection("friends")
-            .add(friendData)
+                // Add friend to initiator's friendList
+                FirebaseFirestore.getInstance().document(request.userPath).collection("friends")
+                    .add(friendData)
+            }
+
         // Remove
         FirebaseFirestore.getInstance().document("users/" + Firebase.auth.currentUser!!.uid)
             .collection("requests").document(request.id).delete()
+
         requestsRequestsRc.adapter?.notifyDataSetChanged()
     }
 
