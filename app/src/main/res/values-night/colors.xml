@@ -4,11 +4,11 @@
     <color name="colorPrimaryDark">#7C49CC</color>
     <color name="colorAccent">#FFD765</color>
 
-    <color name="colorIcon">#171717</color>
+    <color name="colorIcon">#ECECEC</color>
 
-    <color name="backgroundMain">#FFFFFF</color>
-    <color name="textTitle">#171717</color>
-    <color name="textParagraph">#353535</color>
+    <color name="backgroundMain">#101010</color>
+    <color name="textTitle">#ECECEC</color>
+    <color name="textParagraph">#C5C5C5</color>
 
     <color name="colorSecondary">#8e54e9</color>
     <color name="colorSecondaryTranslucid">#808E54E9</color>

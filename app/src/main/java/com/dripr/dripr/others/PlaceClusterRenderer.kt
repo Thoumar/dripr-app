@@ -1,4 +1,4 @@
-package com.thoumar.kebabnomade.others
+package com.dripr.dripr.others
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -26,6 +26,6 @@ class PlaceClusterRenderer(
         val bitmap = Bitmap.createScaledBitmap(decodedRessource, 60, 60, false)
         val icon: BitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap)
 
-        markerOptions.icon(icon)
+        markerOptions.icon(icon).anchor(0.5f, 0.5f)
     }
 }

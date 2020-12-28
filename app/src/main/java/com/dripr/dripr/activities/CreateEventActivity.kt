@@ -1,10 +1,12 @@
 package com.dripr.dripr.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.dripr.dripr.R
+import com.dripr.dripr.entities.Friend
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -14,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_create_event.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener,
         TimePickerDialog.OnTimeSetListener {
@@ -29,10 +32,10 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         dateTextView.setOnClickListener {
             val now = Calendar.getInstance()
             val dpd: DatePickerDialog = DatePickerDialog.newInstance(
-                    this@CreateEventActivity,
-                    now[Calendar.YEAR],
-                    now[Calendar.MONTH],
-                    now[Calendar.DAY_OF_MONTH]
+                this@CreateEventActivity,
+                now[Calendar.YEAR],
+                now[Calendar.MONTH],
+                now[Calendar.DAY_OF_MONTH]
             )
 
             dpd.show(supportFragmentManager, "ok")
@@ -40,10 +43,15 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
 
         timeTextView.setOnClickListener {
             val tpd: TimePickerDialog? = TimePickerDialog.newInstance(
-                    this@CreateEventActivity, true
+                this@CreateEventActivity, true
             )
 
             tpd?.show(supportFragmentManager, "ok")
+        }
+
+        friendsTextView.setOnClickListener {
+            val intent = Intent(this, FriendsPickerActivity::class.java)
+            startActivityForResult(intent, 125)
         }
 
         createEvent.setOnClickListener {
@@ -63,16 +71,27 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
                     .add(newEventData)
                     .addOnSuccessListener {
                         Toast.makeText(
-                                baseContext,
-                                "DocumentSnapshot successfully written!",
-                                Toast.LENGTH_LONG
+                            baseContext,
+                            "DocumentSnapshot successfully written!",
+                            Toast.LENGTH_LONG
                         ).show()
                         Log.d(TAG, "DocumentSnapshot successfully written!")
                         finish()
                     }.addOnFailureListener { e ->
-                        Toast.makeText(baseContext, "Error writing document", Toast.LENGTH_LONG).show()
-                        Log.w(TAG, "Error writing document", e)
-                    }
+                    Toast.makeText(baseContext, "Error writing document", Toast.LENGTH_LONG).show()
+                    Log.w(TAG, "Error writing document", e)
+                }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 125) {
+            selectedFriendsRecyclerView.apply {
+                // init recyclerview with received data
+                val selectedFriendsList =
+                    data?.getParcelableArrayListExtra<Friend>("SELECTED_FRIENDS")
+            }
         }
     }
 

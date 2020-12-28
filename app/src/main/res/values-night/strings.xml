@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Dripr</string>
-    <string name="title_discover">Discover</string>
+    <string name="title_discover">Découvrir</string>
     <string name="title_map">Carte</string>
     <string name="title_events">Evenements</string>
     <string name="title_messages">Messages</string>
@@ -48,7 +48,7 @@
     <string name="onBoardingActivity_pass_text">Passer</string>
     <string name="onBoardingActivity_start_text">Commencer</string>
     <string name="activityMain_profilePicture_contentDescription">Profile picture</string>
-    <string name="discoverFragment_title_text">Découvrir</string>
+    <string name="discoverFragment_title_text">Discover</string>
     <string name="messagesFragment_title_text">Messages</string>
     <string name="eventsFragment_title_text">Évenements</string>
     <string name="articleHorizontalItem_coverPicture_contentDescription">Couverture de l\'article</string>

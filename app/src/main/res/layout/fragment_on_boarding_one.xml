@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundMain"
     tools:context=".fragments.onboarding.OnBoardingOneFragment">
 
     <com.google.android.flexbox.FlexboxLayout
@@ -12,7 +13,6 @@
         android:layout_height="0dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"
-        android:background="@android:color/white"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         app:alignItems="center"
@@ -23,25 +23,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
+        <ImageView
+            android:id="@+id/imageView3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="wrap_content"
-                android:layout_height="450dp"
-                android:contentDescription="@string/fragmentOnboardingOne_illustration_contentDescription"
-                android:scaleType="centerInside"
-                android:src="@drawable/onboarding_pic_one" />
-
-        </androidx.cardview.widget.CardView>
+            android:layout_height="450dp"
+            android:contentDescription="@string/fragmentOnboardingOne_illustration_contentDescription"
+            android:scaleType="centerInside"
+            android:src="@drawable/onboarding_pic_one" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_bold"
             android:text="Localisation"
+            android:textColor="@color/textTitle"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -49,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
-            android:textColor="?android:attr/textColorPrimary"
+            android:textColor="@color/textParagraph"
             android:text="Lorem ipsum dolor sit amet, consecttur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             android:textAlignment="center"
             android:textSize="12sp" />

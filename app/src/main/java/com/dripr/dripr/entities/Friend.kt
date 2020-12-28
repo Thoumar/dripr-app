@@ -11,7 +11,7 @@ data class Friend(
     var userPath: String,
     var profilePicture: String,
     var pseudo: String,
-
+    var isSelected: Boolean,
     var date: Date
 ) : Parcelable {
     constructor() : this(
@@ -19,6 +19,7 @@ data class Friend(
         "",
         "",
         "users/userid",
+        false,
         SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-12-25 20:00:00"),
     )
 }

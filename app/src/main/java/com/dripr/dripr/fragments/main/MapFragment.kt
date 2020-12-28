@@ -6,6 +6,9 @@ import android.app.Activity
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
 import android.util.TypedValue
@@ -16,20 +19,27 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.crowdfire.cfalertdialog.CFAlertDialog
 import com.dripr.dripr.R
 import com.dripr.dripr.activities.PlaceActivity
 import com.dripr.dripr.adapters.places.PlacesAdapter
 import com.dripr.dripr.entities.Place
+import com.dripr.dripr.others.OnSnapPositionChangeListener
+import com.dripr.dripr.others.PlaceClusterRenderer
+import com.dripr.dripr.others.SnapOnScrollListener
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.maps.android.clustering.ClusterManager
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -37,17 +47,18 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
-import com.thoumar.kebabnomade.others.OnSnapPositionChangeListener
-import com.thoumar.kebabnomade.others.PlaceClusterRenderer
-import com.thoumar.kebabnomade.others.SnapOnScrollListener
 import kotlinx.android.synthetic.main.fragment_discover.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.fragment_map.view.*
 import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.round
 import kotlin.math.sqrt
+
 
 class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
 
@@ -70,26 +81,56 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
     ): View? {
         val v = inflater.inflate(R.layout.fragment_map, container, false)
 
-        // Places
-        populatePlacesArray()
-
         // Map
         MapsInitializer.initialize(activity?.applicationContext)
         v.map.onCreate(savedInstanceState)
         v.map.onResume()
         v.map.getMapAsync(this)
+        initListeners(v)
         initLocationProcess()
         return v
     }
 
-    private fun populatePlacesArray() {
+    private fun initListeners(v: View) {
+        v.btn_go_to_location.setOnClickListener { goToUserLocation() }
+    }
 
+    private fun setMapTheme() {
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            // Night mode is not active, we're using the light theme
+            Configuration.UI_MODE_NIGHT_NO -> {
+                setMapStyle(R.raw.style_light)
+            }
+            // Night mode is active, we're using dark theme
+            Configuration.UI_MODE_NIGHT_YES -> {
+                setMapStyle(R.raw.style_dark)
+            }
+        }
     }
 
 
+    private fun goToUserLocation() {
+        if (this::lastLocation.isInitialized) {
+            googleMap.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(
+                        lastLocation.latitude,
+                        lastLocation.longitude
+                    ), 15f
+                )
+            )
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "Vous n\'avez pas encore été localisé",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     override fun onMapReady(mMap: GoogleMap) {
         googleMap = mMap
-        setMapStyle(R.raw.style_light)
+        setMapTheme()
         googleMap.setPadding(
             0,
             0,
@@ -115,14 +156,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
         )
     }
 
-
     private fun onMapPlaceClicked(place: Place): Boolean {
         val indexOfSelectedPlace = places.lastIndexOf(place)
         if (indexOfSelectedPlace != -1) mapRecyclerView.smoothSnapToPosition(indexOfSelectedPlace)
         animateCamera(LatLng(place.latitude, place.longitude))
         return true
     }
-
 
     private fun addAllMarkers() {
         clusterManager = ClusterManager<Place>(requireContext(), googleMap)
@@ -233,7 +272,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
     @SuppressLint("MissingPermission")
     private fun checkPermission() {
         if (isPermissionGiven()) {
-            googleMap.isMyLocationEnabled = true
+            googleMap.isMyLocationEnabled = false
             googleMap.uiSettings.isMyLocationButtonEnabled = false
             googleMap.uiSettings.isZoomControlsEnabled = false
             getCurrentLocation()
@@ -325,6 +364,20 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
         fusedLocationProviderClient = FusedLocationProviderClient(this.requireActivity())
     }
 
+    fun getBitmapFromURL(): Bitmap? {
+        return try {
+            val url = URL(Firebase.auth.currentUser?.photoUrl.toString())
+            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+            connection.doInput = true
+            connection.connect()
+            val input: InputStream = connection.inputStream
+            BitmapFactory.decodeStream(input)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
     @SuppressLint("MissingPermission")
     private fun getLastLocation() {
         fusedLocationProviderClient.lastLocation.addOnCompleteListener(this.requireActivity()) { task: Task<Location> ->
@@ -334,6 +387,38 @@ class MapFragment : Fragment(), OnMapReadyCallback, PermissionListener {
                     .target(LatLng(lastLocation.latitude, lastLocation.longitude))
                     .zoom(15f)
                     .build()
+//
+//                googleMap.addMarker(
+//                    MarkerOptions()
+//                        .position(LatLng(lastLocation.latitude, lastLocation.longitude))
+//                        .icon(getBitmapFromURL())
+//                )
+
+//                    .load(Firebase.auth.currentUser?.photoUrl)
+
+                val options = RequestOptions
+                    .circleCropTransform()
+                    .placeholder(R.drawable.ic_profile)
+
+                Glide.with(this)
+                    .asBitmap()
+                    .load(Firebase.auth.currentUser?.photoUrl)
+                    .fitCenter()
+                    .apply(options)
+                    .into(object : SimpleTarget<Bitmap>(100, 100) {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?
+                        ) {
+                            googleMap.addMarker(
+                                MarkerOptions()
+                                    .anchor(0.5f, 0.5f)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(resource))
+                                    .position(LatLng(lastLocation.latitude, lastLocation.longitude))
+                            )
+                        }
+                    })
+
                 googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
             } else Toast.makeText(
                 this.requireContext(),

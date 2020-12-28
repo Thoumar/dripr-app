@@ -62,11 +62,20 @@
         android:layout_marginTop="32dp"
         android:ems="10"
         android:inputType="time"
-        android:text="pick range date"
+        android:text="pick friends"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timeTextView" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/selectedFriendsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/friendsTextView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

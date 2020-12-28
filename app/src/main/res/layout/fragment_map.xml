@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/backgroundMain">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/map"
@@ -28,5 +28,18 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:itemCount="4"
         tools:listitem="@layout/place_map_item" />
+
+    <ImageButton
+        android:id="@+id/btn_go_to_location"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/bg_round_button_shape_light"
+        android:src="@drawable/ic_gps"
+        android:tint="#242529"
+        app:layout_constraintBottom_toTopOf="@+id/mapRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

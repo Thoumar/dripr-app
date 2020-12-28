@@ -3,7 +3,6 @@ package com.dripr.dripr.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -61,7 +60,6 @@ class ProfileActivity : AppCompatActivity() {
 
                     FirebaseFirestore.getInstance().collection("users").document(user!!.id)
                         .collection("requests").add(requestData).addOnSuccessListener {
-                        Toast.makeText(this, "Invitation envoyée", Toast.LENGTH_LONG).show()
                         addAsFriendBtn.text = "Envoyée"
                         addAsFriendBtn.isEnabled = false
                     }.addOnFailureListener { e -> }
@@ -101,7 +99,6 @@ class ProfileActivity : AppCompatActivity() {
                         friends.add(friend)
                     }
 
-                    Toast.makeText(this, friends.toString(), Toast.LENGTH_LONG).show()
                     friendsRc.apply {
                         layoutManager =
                             LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
@@ -112,7 +109,6 @@ class ProfileActivity : AppCompatActivity() {
                     }
                 }
 
-            Toast.makeText(applicationContext, displayType, Toast.LENGTH_LONG).show()
             addAsFriendBtn.visibility = View.GONE
 
             Glide

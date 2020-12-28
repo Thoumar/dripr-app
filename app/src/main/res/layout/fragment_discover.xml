@@ -5,11 +5,11 @@
     android:id="@+id/discoverFragmentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/backgroundMain"
     tools:context=".fragments.main.DiscoverFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/discoverFragment_title_text"
-                android:textColor="@android:color/black"
+                android:textColor="@color/textTitle"
                 android:textSize="35sp" />
 
             <ImageButton
@@ -40,7 +40,7 @@
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_search"
-                android:tint="@color/black"
+                android:tint="@color/colorIcon"
                 tools:layout_editor_absoluteX="330dp"
                 tools:layout_editor_absoluteY="8dp">
 

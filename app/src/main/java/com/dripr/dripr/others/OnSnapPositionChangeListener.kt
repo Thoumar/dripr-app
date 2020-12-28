@@ -1,4 +1,4 @@
-package com.thoumar.kebabnomade.others
+package com.dripr.dripr.others
 
 interface OnSnapPositionChangeListener {
 
