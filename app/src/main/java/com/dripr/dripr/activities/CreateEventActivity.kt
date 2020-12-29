@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dripr.dripr.R
+import com.dripr.dripr.adapters.friends.FriendsAdapter
 import com.dripr.dripr.entities.Friend
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +26,7 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
     val TAG = "[CreateEventActivity]"
     var eventDate: String? = null
     var eventTime: String? = null
+    private lateinit var selectedFriendsList: List<Friend>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,10 +64,13 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
             val formatter: DateFormat = SimpleDateFormat(DEFAULT_PATTERN)
             val event_date = formatter.parse("${eventDate} ${eventTime}")
 
+            val friendsIds = selectedFriendsList.map { "users/" + it.id }
+
             val newEventData = hashMapOf(
-                "name" to event_name,
-                "date" to event_date,
-                "ownerId" to Firebase.auth.currentUser?.uid
+                    "name" to event_name,
+                    "date" to event_date,
+                    "ownerId" to Firebase.auth.currentUser?.uid,
+                    "membersList" to friendsIds
             )
 
             FirebaseFirestore.getInstance().collection("events")
@@ -89,8 +95,12 @@ class CreateEventActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListe
         if (requestCode == 125) {
             selectedFriendsRecyclerView.apply {
                 // init recyclerview with received data
-                val selectedFriendsList =
-                    data?.getParcelableArrayListExtra<Friend>("SELECTED_FRIENDS")
+                selectedFriendsList = data?.getParcelableArrayListExtra<Friend>("SELECTED_FRIENDS")?.toList() as List<Friend>
+                layoutManager =
+                        LinearLayoutManager(this@CreateEventActivity, LinearLayoutManager.HORIZONTAL, false)
+                adapter = FriendsAdapter("horizontal", selectedFriendsList) {
+                    Toast.makeText(applicationContext, "Clicked on user " + it.pseudo, Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
