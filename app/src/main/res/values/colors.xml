@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#8e54e9</color>
-    <color name="colorPrimaryDark">#7C49CC</color>
+    <color name="colorPrimary">#536DFE</color>
+    <color name="colorPrimaryDark">#344EE1</color>
     <color name="colorAccent">#FFD765</color>
 
     <color name="colorIcon">#171717</color>
@@ -10,8 +10,10 @@
     <color name="textTitle">#171717</color>
     <color name="textParagraph">#353535</color>
 
+    <color name="colorPrimaryTranslucid">#34536DFE</color>
+
+
     <color name="colorSecondary">#8e54e9</color>
-    <color name="colorSecondaryTranslucid">#808E54E9</color>
     <color name="colorTint">#4776e6</color>
 
     <color name="accentYellow">#FFD765</color>

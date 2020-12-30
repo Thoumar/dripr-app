@@ -128,7 +128,7 @@
             android:id="@+id/validateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorSecondaryTranslucid"
+            android:background="@color/colorSecondary"
             android:text="@string/signUpActivity_validateBtn_text"
             tools:layout_editor_absoluteX="130dp"
             tools:layout_editor_absoluteY="328dp" />

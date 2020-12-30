@@ -34,10 +34,9 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
         android:background="@drawable/bg_round_button_shape_light"
         android:src="@drawable/ic_gps"
-        android:tint="#242529"
+        android:tint="@color/textParagraph"
         app:layout_constraintBottom_toTopOf="@+id/mapRecyclerView"
         app:layout_constraintEnd_toEndOf="parent" />
 
